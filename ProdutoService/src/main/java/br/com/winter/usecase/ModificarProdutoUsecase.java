@@ -19,21 +19,40 @@ public class ModificarProdutoUsecase {
         this.produtoRepository = produtoRepository;
     }
 
-    public Produto modificarProduto(ObjectId id, @Valid Produto produto) throws ProdutoNaoExistenteException{
+    public Produto modificarProduto(ObjectId id, @Valid Produto produto) throws ProdutoNaoExistenteException {
         Optional<Produto> produtoExistenteOpt = produtoRepository.findById(id);
-        if(produtoExistenteOpt.isPresent()) {
-            Produto produtoExistente = produtoExistenteOpt.get();
-            produtoExistente.setNome(produto.getNome());
-            produtoExistente.setMarca(produto.getMarca());
-            produtoExistente.setValor(produto.getValor());
-            if (produtoRepository.findByCodigo(produto.getCodigo())
-                    .filter(c -> !c.getId().equals(produtoExistente.getId()))
-                    .isPresent()) {
-                throw new ProdutoJaExistenteException("Nome já existe");
-            }
-            return produtoRepository.save(produtoExistente);
-        } else {
+
+        if (produtoExistenteOpt.isEmpty()) {
             throw new ProdutoNaoExistenteException("O produto com o Id: " + id + " não existe");
         }
+
+        Produto produtoExistente = getProduto(produto, produtoExistenteOpt);
+
+        if (produto.getCodigo() != null &&
+                produtoRepository.findByCodigo(produtoExistente.getCodigo())
+                        .filter(c -> !c.getId().equals(produtoExistente.getId()))
+                        .isPresent()) {
+            throw new ProdutoJaExistenteException("Código já existe");
+        }
+
+        return produtoRepository.save(produtoExistente);
+    }
+
+    private static Produto getProduto(Produto produto, Optional<Produto> produtoExistenteOpt) {
+        Produto produtoExistente = produtoExistenteOpt.get();
+
+        if (produto.getNome() != null) {
+            produtoExistente.setNome(produto.getNome());
+        }
+        if (produto.getMarca() != null) {
+            produtoExistente.setMarca(produto.getMarca());
+        }
+        if (produto.getValor() != null) {
+            produtoExistente.setValor(produto.getValor());
+        }
+        if (produto.getCodigo() != null) {
+            produtoExistente.setCodigo(produto.getCodigo());
+        }
+        return produtoExistente;
     }
 }

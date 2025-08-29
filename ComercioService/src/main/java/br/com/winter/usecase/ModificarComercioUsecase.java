@@ -22,35 +22,49 @@ public class ModificarComercioUsecase {
         this.comercioValidation = comercioValidation;
     }
 
-    public Comercio modificarComercio(Long id, @Valid Comercio comercio) throws ComercioNaoExistenteException{
+    public Comercio modificarComercio(Long id, @Valid Comercio comercio) throws ComercioNaoExistenteException {
         Optional<Comercio> comercioExistenteOpt = comercioRepository.findById(id);
-        if(comercioExistenteOpt.isPresent()) {
-            Comercio comercioExistente = comercioExistenteOpt.get();
-            comercioExistente.setNome(comercio.getNome());
-            comercioExistente.setTel(comercio.getTel());
-            comercioExistente.setEstado(comercio.getEstado());
-            if (!comercioValidation.siglaValida(comercio)) {
-                throw new UFInvalidaException("A UF: " + comercio.getEstado() + " não existe");
-            }
-            if (!comercioValidation.validarDDD(comercio)){
-                throw new DDDInvalidaException("O DDD: " + comercio.getTel().substring(0, 2) + " não existe");
-            }
-            if (!comercioValidation.validarDDDporUFs(comercio)) {
-                throw new DDDDaUFInvalidaException("O DDD: " + comercio.getTel().substring(0, 2) + " não pertence ao estado: " + comercio.getEstado());
-            }
-            if (comercioRepository.findByNome(comercio.getNome())
-                    .filter(c -> !c.getId().equals(comercioExistente.getId()))
-                    .isPresent()) {
-                throw new ComercioJaExistenteException("Nome já existe");
-            }
-            if (comercioRepository.findByTel(comercio.getTel())
-                    .filter(c -> !c.getId().equals(comercioExistente.getId()))
-                    .isPresent()) {
-                throw new ComercioJaExistenteException("Telefone já existe");
-            }
-            return comercioRepository.save(comercioExistente);
-        } else {
-            throw new ComercioNaoExistenteException("O comercio com o Id: " + id + " não existe");
+
+        if (comercioExistenteOpt.isEmpty()) {
+            throw new ComercioNaoExistenteException("O comércio com o Id: " + id + " não existe");
         }
+
+        Comercio comercioExistente = comercioExistenteOpt.get();
+
+        if (comercio.getNome() != null) {
+            comercioExistente.setNome(comercio.getNome());
+        }
+        if (comercio.getTel() != null) {
+            comercioExistente.setTel(comercio.getTel());
+        }
+        if (comercio.getEstado() != null) {
+            comercioExistente.setEstado(comercio.getEstado());
+        }
+
+        if (!comercioValidation.siglaValida(comercioExistente)) {
+            throw new UFInvalidaException("A UF: " + comercioExistente.getEstado() + " não existe");
+        }
+        if (!comercioValidation.validarDDD(comercioExistente)) {
+            throw new DDDInvalidaException("O DDD: " + comercioExistente.getTel().substring(0, 2) + " não existe");
+        }
+        if (!comercioValidation.validarDDDporUFs(comercioExistente)) {
+            throw new DDDDaUFInvalidaException("O DDD: " + comercioExistente.getTel().substring(0, 2)
+                    + " não pertence ao estado: " + comercioExistente.getEstado());
+        }
+
+        if (comercio.getNome() != null &&
+                comercioRepository.findByNome(comercioExistente.getNome())
+                        .filter(c -> !c.getId().equals(comercioExistente.getId()))
+                        .isPresent()) {
+            throw new ComercioJaExistenteException("Nome já existe");
+        }
+        if (comercio.getTel() != null &&
+                comercioRepository.findByTel(comercioExistente.getTel())
+                        .filter(c -> !c.getId().equals(comercioExistente.getId()))
+                        .isPresent()) {
+            throw new ComercioJaExistenteException("Telefone já existe");
+        }
+
+        return comercioRepository.save(comercioExistente);
     }
 }

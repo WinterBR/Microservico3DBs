@@ -8,6 +8,7 @@ import br.com.winter.validation.ClienteValidation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CadastrarClienteUsecase {
@@ -21,12 +22,13 @@ public class CadastrarClienteUsecase {
         this.dataValidation = dataValidation;
     }
 
+    @Transactional
     public Cliente cadastrarCliente(@Valid Cliente cliente) throws IdadeIlegalException {
         if (clienteRepository.findByCpf(cliente.getCpf()).isPresent()) {
-            throw new ClienteJaExistenteException("O CPF já existe");
+            throw new ClienteJaExistenteException("O CPF " + cliente.getCpf() + " já existe");
         }
         if (clienteRepository.findByEmail(cliente.getEmail()).isPresent()) {
-            throw new ClienteJaExistenteException("O Email já existe");
+            throw new ClienteJaExistenteException("O Email " + cliente.getEmail() + " já existe");
         } else {
             if(!dataValidation.maiorDeIdade(cliente)) {
                 throw new IdadeIlegalException("O cliente foi registrado como nascido em: " + cliente.getData() + " fazendo dele menor de idade.");
