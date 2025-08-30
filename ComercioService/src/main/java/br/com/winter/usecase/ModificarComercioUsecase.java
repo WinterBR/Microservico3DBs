@@ -7,6 +7,7 @@ import br.com.winter.validation.ComercioValidation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ public class ModificarComercioUsecase {
         this.comercioValidation = comercioValidation;
     }
 
+    @Transactional
     public Comercio modificarComercio(Long id, @Valid Comercio comercio) throws ComercioNaoExistenteException {
         Optional<Comercio> comercioExistenteOpt = comercioRepository.findById(id);
 

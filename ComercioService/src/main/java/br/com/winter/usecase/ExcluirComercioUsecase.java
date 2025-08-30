@@ -5,6 +5,7 @@ import br.com.winter.exceptions.ComercioNaoExistenteException;
 import br.com.winter.repository.IComercioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ExcluirComercioUsecase {
@@ -16,6 +17,7 @@ public class ExcluirComercioUsecase {
         this.comercioRepository = comercioRepository;
     }
 
+    @Transactional
     public void excluirComercio(Long id) {
         try{
             comercioRepository.deleteById(id);

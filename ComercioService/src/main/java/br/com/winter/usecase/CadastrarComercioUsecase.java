@@ -10,6 +10,7 @@ import br.com.winter.validation.ComercioValidation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CadastrarComercioUsecase {
@@ -23,6 +24,7 @@ public class CadastrarComercioUsecase {
         this.comercioValidation = comercioValidation;
     }
 
+    @Transactional
     public Comercio cadastrarComercio(@Valid Comercio comercio) {
         if (comercioRepository.findByNome(comercio.getNome()).isPresent()) {
             throw new ComercioJaExistenteException("O Nome já existe");

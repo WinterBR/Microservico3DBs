@@ -1,6 +1,9 @@
 package br.com.winter.resource;
 
+import br.com.winter.DTO.ComercioRequestDTO;
+import br.com.winter.DTO.ComercioResponseDTO;
 import br.com.winter.entity.Comercio;
+import br.com.winter.mapper.ComercioMapper;
 import br.com.winter.repository.IComercioRepository;
 import br.com.winter.usecase.BuscarComercioUsecase;
 import br.com.winter.usecase.CadastrarComercioUsecase;
@@ -41,66 +44,72 @@ public class ComercioResource {
 
     @GetMapping
     @Operation(summary = "Buscar todos os Comércios")
-    public ResponseEntity<Page<Comercio>> buscarTodos(Pageable pageable) {
-        return ResponseEntity.ok(buscarComercioUsecase.buscarTodos(pageable)); // 200
+    public ResponseEntity<Page<ComercioResponseDTO>> buscarTodos(Pageable pageable) {
+        Page<ComercioResponseDTO> page = buscarComercioUsecase.buscarTodos(pageable)
+                .map(ComercioMapper::toDTO);
+        return ResponseEntity.ok(page); // 200
     }
 
     @GetMapping("/id/{id}")
     @Operation(summary = "Buscar Comércio via ID")
-    public ResponseEntity<Comercio> buscarPorId(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<ComercioResponseDTO> buscarPorId(@PathVariable Long id) {
         return buscarComercioUsecase.buscarPorId(id)
+                .map(ComercioMapper::toDTO)
                 .map(ResponseEntity::ok) // 200
                 .orElse(ResponseEntity.notFound().build()); // 404
     }
 
     @GetMapping("/nome/{nome}")
     @Operation(summary = "Buscar Comércio via nome")
-    public ResponseEntity<Comercio> buscarPorNome(@PathVariable(value = "nome") String nome) {
+    public ResponseEntity<ComercioResponseDTO> buscarPorNome(@PathVariable String nome) {
         return buscarComercioUsecase.buscarPorNome(nome)
+                .map(ComercioMapper::toDTO)
                 .map(ResponseEntity::ok) // 200
                 .orElse(ResponseEntity.notFound().build()); // 404
     }
 
     @GetMapping("/tel/{tel}")
     @Operation(summary = "Buscar Comércio via telefone")
-    public ResponseEntity<Comercio> buscarPorTel(@PathVariable(value = "tel") String tel) {
+    public ResponseEntity<ComercioResponseDTO> buscarPorTel(@PathVariable String tel) {
         return buscarComercioUsecase.buscarPorTel(tel)
+                .map(ComercioMapper::toDTO)
                 .map(ResponseEntity::ok) // 200
                 .orElse(ResponseEntity.notFound().build()); // 404
     }
 
     @GetMapping("/estado/{estado}")
     @Operation(summary = "Buscar Comércio via estado")
-    public ResponseEntity<Comercio> buscarPorEstado(@PathVariable(value = "estado") String estado) {
+    public ResponseEntity<ComercioResponseDTO> buscarPorEstado(@PathVariable String estado) {
         return buscarComercioUsecase.buscarPorEstado(estado)
+                .map(ComercioMapper::toDTO)
                 .map(ResponseEntity::ok) // 200
                 .orElse(ResponseEntity.notFound().build()); // 404
     }
 
     @PostMapping
     @Operation(summary = "Cadastrar Comércio")
-    public ResponseEntity<Comercio> cadastrarComercio(@RequestBody @Valid Comercio comercio) {
-        Comercio novoComercio = cadastrarComercioUsecase.cadastrarComercio(comercio);
+    public ResponseEntity<ComercioResponseDTO> cadastrarComercio(@RequestBody @Valid ComercioRequestDTO dto) {
+        Comercio novoComercio = cadastrarComercioUsecase.cadastrarComercio(ComercioMapper.toEntity(dto));
         return ResponseEntity
                 .created(URI.create("/comercio/id/" + novoComercio.getId())) // 201
-                .body(novoComercio);
+                .body(ComercioMapper.toDTO(novoComercio));
     }
 
     @PutMapping("/id/{id}")
     @Operation(summary = "Modificar Comércio via ID")
-    public ResponseEntity<Comercio> modificarComercio(@PathVariable(value = "id") Long id,
-                                                      @RequestBody @Valid Comercio comercio) {
+    public ResponseEntity<ComercioResponseDTO> modificarComercio(@PathVariable Long id,
+                                                                 @RequestBody @Valid ComercioRequestDTO dto) {
         return comercioRepository.findById(id)
                 .map(c -> {
-                    Comercio atualizado = modificarComercioUsecase.modificarComercio(id, comercio);
-                    return ResponseEntity.ok(atualizado); // 200
+                    Comercio atualizado = modificarComercioUsecase.modificarComercio(id, ComercioMapper.toEntity(dto));
+                    return ResponseEntity.ok(ComercioMapper.toDTO(atualizado)); // 200
                 })
                 .orElse(ResponseEntity.notFound().build()); // 404
     }
 
     @DeleteMapping("/id/{id}")
     @Operation(summary = "Excluir Comércio via ID")
-    public ResponseEntity<Void> excluirComercio(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Void> excluirComercio(@PathVariable Long id) {
         if (comercioRepository.existsById(id)) {
             excluirComercioUsecase.excluirComercio(id);
             return ResponseEntity.noContent().build(); // 204

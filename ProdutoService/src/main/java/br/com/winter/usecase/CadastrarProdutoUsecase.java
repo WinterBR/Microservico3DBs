@@ -5,6 +5,7 @@ import br.com.winter.exceptions.ProdutoJaExistenteException;
 import br.com.winter.repository.IProdutoRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CadastrarProdutoUsecase {
@@ -15,6 +16,7 @@ public class CadastrarProdutoUsecase {
         this.produtoRepository = produtoRepository;
     }
 
+    @Transactional
     public Produto cadastrarProduto(@Valid Produto produto) {
         if (produtoRepository.findByMarca(produto.getMarca()).isPresent()) {
             throw new ProdutoJaExistenteException("A Marca: " + produto.getMarca() + " já existe");

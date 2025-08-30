@@ -7,6 +7,7 @@ import br.com.winter.repository.IProdutoRepository;
 import jakarta.validation.Valid;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ public class ModificarProdutoUsecase {
         this.produtoRepository = produtoRepository;
     }
 
+    @Transactional
     public Produto modificarProduto(ObjectId id, @Valid Produto produto) throws ProdutoNaoExistenteException {
         Optional<Produto> produtoExistenteOpt = produtoRepository.findById(id);
 
