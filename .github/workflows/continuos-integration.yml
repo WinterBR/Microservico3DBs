@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [ClienteService, ComercioService, ProdutoService, ConfigServer]
+        hub: [config, cliente, comercio, produto]
+        service: [ConfigServer, ClienteService, ComercioService, ProdutoService]
 
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +33,7 @@ jobs:
         run: mvn -B package
 
       - name: Build Docker Image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/microservice3dbs_${{ matrix.service }}:latest ${{ matrix.service }}
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/microservice3dbs_${{ matrix.hub }}:latest ${{ matrix.service }}
 
       - name: Push Docker Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/microservice3dbs_${{ matrix.service }}:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/microservice3dbs_${{ matrix.hub }}:latest
