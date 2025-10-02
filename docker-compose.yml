@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: senha1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
+  postgres:
+    image: postgres:16.0
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: senha1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:7.0
+    container_name: mongo_db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: senha1234
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo_data:/data/db
+
+  config-server:
+    image: winteredu/microservice3dbs_config:2.0.0
+    ports:
+      - "8888:8888"
+    depends_on:
+      - mysql
+      - postgres
+      - mongo
+
+  cliente-service:
+    image: winteredu/microservice3dbs_cliente:1.0.0
+    ports:
+      - "8082:8082"
+    depends_on:
+      - config-server
+      - postgres
+
+  produto-service:
+    image: winteredu/microservice3dbs_produto:1.0.0
+    ports:
+      - "8083:8083"
+    depends_on:
+      - config-server
+      - mongo
+
+  comercio-service:
+    image: winteredu/microservice3dbs_comercio:1.0.0
+    ports:
+      - "8081:8081"
+    depends_on:
+      - config-server
+      - mysql

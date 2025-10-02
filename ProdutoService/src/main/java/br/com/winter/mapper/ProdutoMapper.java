@@ -3,7 +3,6 @@ package br.com.winter.mapper;
 import br.com.winter.DTO.ProdutoRequestDTO;
 import br.com.winter.DTO.ProdutoResponseDTO;
 import br.com.winter.entity.Produto;
-import org.bson.types.ObjectId;
 
 public class ProdutoMapper {
 

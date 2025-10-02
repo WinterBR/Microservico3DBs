@@ -1,0 +1,31 @@
+package br.com.winter.integrationTests.swagger;
+
+import br.com.winter.config.TestConfigs;
+import br.com.winter.testContainers.AbstractIntegrationTest;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+
+import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@ActiveProfiles("test")
+public class SwaggerIntegrationTest extends AbstractIntegrationTest {
+
+    @Test
+    void swaggerDeveCarregarTest() {
+        var content = given()
+                .basePath("/swagger-ui/index.html")
+                .port(TestConfigs.SERVER_PORT)
+                .when()
+                .get()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        assertTrue(content.contains("Swagger UI"));
+    }
+}

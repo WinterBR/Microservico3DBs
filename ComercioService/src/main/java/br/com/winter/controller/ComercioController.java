@@ -1,4 +1,4 @@
-package br.com.winter.resource;
+package br.com.winter.controller;
 
 import br.com.winter.DTO.ComercioRequestDTO;
 import br.com.winter.DTO.ComercioResponseDTO;
@@ -21,7 +21,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/comercio")
-public class ComercioResource {
+public class ComercioController {
 
     private final BuscarComercioUsecase buscarComercioUsecase;
     private final CadastrarComercioUsecase cadastrarComercioUsecase;
@@ -30,7 +30,7 @@ public class ComercioResource {
     private final IComercioRepository comercioRepository;
 
     @Autowired
-    public ComercioResource(BuscarComercioUsecase buscarComercioUsecase,
+    public ComercioController(BuscarComercioUsecase buscarComercioUsecase,
                             CadastrarComercioUsecase cadastrarComercioUsecase,
                             ExcluirComercioUsecase excluirComercioUsecase,
                             ModificarComercioUsecase modificarComercioUsecase,

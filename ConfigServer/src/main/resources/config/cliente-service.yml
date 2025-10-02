@@ -4,9 +4,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/db_cliente
-    username: postgres
-    password: senha
+    url: jdbc:postgresql://postgres_db:5432/db_cliente
+    username: user
+    password: senha1234
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

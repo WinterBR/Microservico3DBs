@@ -1,4 +1,4 @@
-package br.com.winter.resource;
+package br.com.winter.controller;
 
 import br.com.winter.DTO.ClienteRequestDTO;
 import br.com.winter.DTO.ClienteResponseDTO;
@@ -21,7 +21,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/cliente")
-public class ClienteResource {
+public class ClienteController {
 
     private final BuscarClienteUsecase buscarClienteUsecase;
     private final CadastrarClienteUsecase cadastrarClienteUsecase;
@@ -30,7 +30,7 @@ public class ClienteResource {
     private final IClienteRepository clienteRepository;
 
     @Autowired
-    public ClienteResource(
+    public ClienteController(
             BuscarClienteUsecase buscarClienteUsecase,
             CadastrarClienteUsecase cadastrarClienteUsecase,
             ExcluirClienteUsecase excluirClienteUsecase,

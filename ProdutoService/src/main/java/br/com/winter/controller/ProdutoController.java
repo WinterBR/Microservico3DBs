@@ -1,4 +1,4 @@
-package br.com.winter.resource;
+package br.com.winter.controller;
 
 import br.com.winter.DTO.ProdutoRequestDTO;
 import br.com.winter.DTO.ProdutoResponseDTO;
@@ -21,7 +21,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/produto")
-public class ProdutoResource {
+public class ProdutoController {
 
     private final BuscarProdutoUsecase buscarProdutoUsecase;
     private final CadastrarProdutoUsecase cadastrarProdutoUsecase;
@@ -29,10 +29,10 @@ public class ProdutoResource {
     private final ModificarProdutoUsecase modificarProdutoUsecase;
 
     @Autowired
-    public ProdutoResource(BuscarProdutoUsecase buscarProdutoUsecase,
-                           CadastrarProdutoUsecase cadastrarProdutoUsecase,
-                           ExcluirProdutoUsecase excluirProdutoUsecase,
-                           ModificarProdutoUsecase modificarProdutoUsecase) {
+    public ProdutoController(BuscarProdutoUsecase buscarProdutoUsecase,
+                             CadastrarProdutoUsecase cadastrarProdutoUsecase,
+                             ExcluirProdutoUsecase excluirProdutoUsecase,
+                             ModificarProdutoUsecase modificarProdutoUsecase) {
         this.buscarProdutoUsecase = buscarProdutoUsecase;
         this.cadastrarProdutoUsecase = cadastrarProdutoUsecase;
         this.excluirProdutoUsecase = excluirProdutoUsecase;
