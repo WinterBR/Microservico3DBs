@@ -26,3 +26,6 @@ Para acessar o swagger:
 8082 (Cliente)
 
 8083 (Produto)
+
+
+[![Build and Push to Azure Container Registry](https://github.com/WinterBR/Microservico3DBs/actions/workflows/continuos-integration.yml/badge.svg)](https://github.com/WinterBR/Microservico3DBs/actions/workflows/continuos-integration.yml)
