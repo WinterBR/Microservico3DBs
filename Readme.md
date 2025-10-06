@@ -1,13 +1,19 @@
 Arquitetura RESTful em Java composta por três serviços independentes (Cliente, Produto e 
 Comércio), integrados a PostgreSQL, MySQL e MongoDB, com o gerenciamento de dependências 
 feito no Maven através do Spring Boot; 
+
 ● CRUD completo com validações personanizadas (maioridade, DDD válido, UF válida e vínculo 
 DDD–Estado); 
+
 ● Documentação com Swagger, testes unitários e de integração com JUnit 5 + Mockito; 
+
 ● Estrutura modular com ConfigServer, Services independentes, Entities, Repositories, UseCases, 
 DTOs, Mappers, Exceptions e Controllers documentados; 
+
 ● Deploy com Docker Compose, integração com repositórios no Container regiestries do Azure; 
+
 ● CI/CD com GitHub Actions fazendo o build e o push para os containers do Azure; 
+
 ● Tecnologias utilizadas: Java 23, Azure, GitHub Actions, Spring Boot, Hibernate, Spring Data, 
 Docker, Docker Compose, Swagger, JUnit 5 + Mockito, PostgreSQL, MySQL e MongoDB. 
 
